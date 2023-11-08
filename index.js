@@ -27,12 +27,20 @@ async function run() {
     await client.connect();
 
     const servicesCollection = client.db('homeHealers').collection('services');
+    const bookingsCollection = client.db('homeHealers').collection('bookings');
 
     app.post('/services', async(req, res) => {
         const newService = req.body;
         console.log(newService);
         const result = await servicesCollection.insertOne(newService);
         res.send(result);
+      })
+
+      app.post('/bookings', async(req, res)=>{
+        const newBooking = req.body;
+        console.log(newBooking);
+        const result = await bookingsCollection.insertOne(newBooking)
+        res.send(result)
       })
 
       app.get('/services', async (req, res) => {
