@@ -49,6 +49,21 @@ async function run() {
         res.send(result);
     })
 
+      app.get('/bookings', async (req, res) => {
+        const cursor = bookingsCollection.find();
+        const result = await cursor.toArray();
+        res.send(result);
+    })
+
+    app.get('/myBookings', async (req, res) => {
+      let query = {};
+      if (req.query?.userEmail){
+        query = { userEmail: req.query.userEmail }
+      }
+      const result = await bookingsCollection.find(query).toArray();
+      res.send(result);
+    })
+
     app.get('/myServices', async (req, res) => {
       console.log(req.query);
       let query = {};
