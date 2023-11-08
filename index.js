@@ -41,6 +41,16 @@ async function run() {
         res.send(result);
     })
 
+    app.get('/myServices', async (req, res) => {
+      console.log(req.query);
+      let query = {};
+      if (req.query?.yourEmail){
+        query = { yourEmail: req.query.yourEmail }
+      }
+      const result = await servicesCollection.find(query).toArray();
+      res.send(result);
+    })
+
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
