@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 require('dotenv').config()
 const app = express();
 const port = process.env.PORT || 4000;
@@ -50,6 +50,43 @@ async function run() {
       const result = await servicesCollection.find(query).toArray();
       res.send(result);
     })
+
+
+    app.get('/myServices/:id', async (req, res) => {
+      const id = req.params.id;
+      const query = {_id: new ObjectId(id)}
+      const result = await servicesCollection.findOne(query)
+      res.send(result);
+    })
+
+    app.put('/myServices/:id', async (req, res) => {
+      const id = req.params.id;
+      const filter = {_id : new ObjectId(id)}
+      const options = {upsert: true}
+      const updatedService = req.body
+      const service = {
+        $set: {
+          pictureUrl: updatedService.pictureUrl, 
+          yourImage: updatedService.yourImage,  
+          yourName: updatedService.yourName,  
+          yourEmail: updatedService.yourEmail, 
+          serviceName: updatedService.serviceName, 
+          price: updatedService.price, 
+          description: updatedService.description, 
+          serviceArea: updatedService.serviceArea, 
+        }
+      }
+      const result = await servicesCollection.updateOne(filter, service, options)
+      res.send(result)
+    })
+
+    app.delete('/myServices/:id', async (req, res) => {
+      const id = req.params.id;
+      const query = {_id : new ObjectId(id)}
+      const result = await servicesCollection.deleteOne(query)
+      res.send(result)
+    })
+
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
