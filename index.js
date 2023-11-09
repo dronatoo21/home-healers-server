@@ -55,9 +55,9 @@ async function run() {
         res.send(result);
     })
 
-    app.get('/bookings', async (req, res) => {
+    app.get('/orders', async (req, res) => {
       let query = {};
-      if (req.query?.providerEamil){
+      if (req.query.providerEamil){
         query = { providerEamil: req.query.providerEamil }
       }
       const result = await bookingsCollection.find(query).toArray();
